@@ -47,6 +47,7 @@ langchain4j:
       log-requests: true
       log-responses: true
       base-url: ${langchain4j.open-ai.chat-model.base-url}
+
   ollama:
     chat-model:
       base-url: ${langchain4j.ollama.chat-model.base-url}
@@ -55,3 +56,17 @@ langchain4j:
       temperature: ${langchain4j.ollama.chat-model.temperature}
       # 回复响应超时时间
       timeout: ${langchain4j.ollama.chat-model.timeout}
+
+  # 阿里大模型
+  community:
+    dashscope:
+        chat-model:
+          api-key: ${langchain4j.community.dashscope.chat-model.api-key}
+          model-name: ${langchain4j.community.dashscope.chat-model.model-name}
+#          temperature: 1
+
+aliyun:
+  image-model:
+    api-key: ${aliyun.image-model.api-key}
+    model-name: ${aliyun.image-model.model-name}
+
