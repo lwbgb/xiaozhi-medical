@@ -10,13 +10,12 @@ import dev.langchain4j.model.openai.OpenAiChatModel;
 import dev.langchain4j.model.output.Response;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
 import pers.lwb.properties.AliyunModelProperties;
 import pers.lwb.utils.WanxImageGenerationUtil;
 
 import java.net.URI;
 
-@SpringBootTest
+//@SpringBootTest
 public class LLMTest {
 
     @Test

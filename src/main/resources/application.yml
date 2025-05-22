@@ -6,6 +6,9 @@ spring:
       matching-strategy: ant_path_matcher
   profiles:
     active: dev
+  data:
+    mongodb:
+      uri: ${spring.data.mongodb.uri}
 
 server:
   port: 8080
@@ -69,4 +72,5 @@ aliyun:
   image-model:
     api-key: ${aliyun.image-model.api-key}
     model-name: ${aliyun.image-model.model-name}
+
 
