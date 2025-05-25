@@ -8,6 +8,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import pers.lwb.assistant.XiaoZhiMedicalAssistant;
 import pers.lwb.store.MongoChatMemoryStore;
+import pers.lwb.tools.AppointmentTool;
 
 /**
  * @author LiWenBin
@@ -41,16 +42,18 @@ public class XiaoZhiMedicalAssistantConfig {
     }
 
     /**
-     * 创建小智医疗助手，设置包括：聊天模型、聊天配置
+     * 创建小智医疗助手，设置包括：聊天模型、聊天配置、挂号功能
      * @param xiaoZhiChatMemoryProvider 配置聊天能力
+     * @param appointmentTool 函数调用/工具
      * @return XiaoZhiMedicalAssistant
      */
     @Bean
-    public XiaoZhiMedicalAssistant xiaoZhiMedicalAssistant(ChatMemoryProvider xiaoZhiChatMemoryProvider) {
+    public XiaoZhiMedicalAssistant xiaoZhiMedicalAssistant(ChatMemoryProvider xiaoZhiChatMemoryProvider, AppointmentTool appointmentTool) {
         return AiServices
                 .builder(XiaoZhiMedicalAssistant.class)
                 .chatModel(qwenChatModel)
                 .chatMemoryProvider(xiaoZhiChatMemoryProvider)
+                .tools(appointmentTool)
                 .build();
     }
 }

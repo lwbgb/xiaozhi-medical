@@ -31,8 +31,7 @@ public class XiaoZhiController {
     public String chat(@RequestBody ChatFormDTO chatFormDTO) {
         log.info("用户{}发起对话：{}", chatFormDTO.getMemoryId(), chatFormDTO.getMessage());
         Result<String> result = xiaoZhiMedicalAssistant.chat(chatFormDTO.getMemoryId(), chatFormDTO.getMessage());
-        log.info("小智回复：{}", result.content());
+        System.out.println(result.content());
         return null;
     }
-
 }

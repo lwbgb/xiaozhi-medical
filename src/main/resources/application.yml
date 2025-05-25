@@ -9,6 +9,11 @@ spring:
   data:
     mongodb:
       uri: ${spring.data.mongodb.uri}
+  datasource:
+    username: ${spring.datasource.username}
+    url: ${spring.datasource.url}
+    password: ${spring.datasource.password}
+    driver-class-name: com.mysql.cj.jdbc.Driver
 
 
 server:
@@ -69,13 +74,16 @@ langchain4j:
         chat-model:
           api-key: ${langchain4j.community.dashscope.chat-model.api-key}
           model-name: ${langchain4j.community.dashscope.chat-model.model-name}
-#          parameters:
-#            response-format: json
-#          temperature: 1
 
 aliyun:
   image-model:
     api-key: ${aliyun.image-model.api-key}
     model-name: ${aliyun.image-model.model-name}
+
+mybatis-plus:
+  configuration:
+    # 开启 SQL 日志打印
+    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+    map-underscore-to-camel-case: true
 
 
