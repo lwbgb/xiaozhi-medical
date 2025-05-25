@@ -22,7 +22,7 @@ public class ChatMessages {
     private ObjectId messageId;
 
     // chatMemory 的 id
-    private String memoryId;
+    private Long memoryId;
 
     // 对应 MangoDB 记录的内容，格式为 json
     private String content;
