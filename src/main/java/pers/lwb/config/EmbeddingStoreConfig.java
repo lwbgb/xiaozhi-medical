@@ -29,7 +29,7 @@ public class EmbeddingStoreConfig {
      *
      * @return 向量存储库
      */
-    @Bean
+    @Bean("pineconeEmbeddingStore")
     public EmbeddingStore<TextSegment> embeddingStore() {
         return PineconeEmbeddingStore.builder()
                 .apiKey(pineconeProperties.getApiKey())

@@ -8,9 +8,11 @@ import dev.langchain4j.data.document.splitter.DocumentByParagraphSplitter;
 import dev.langchain4j.data.segment.TextSegment;
 import dev.langchain4j.memory.chat.ChatMemoryProvider;
 import dev.langchain4j.memory.chat.MessageWindowChatMemory;
+import dev.langchain4j.model.embedding.EmbeddingModel;
 import dev.langchain4j.rag.content.retriever.ContentRetriever;
 import dev.langchain4j.rag.content.retriever.EmbeddingStoreContentRetriever;
 import dev.langchain4j.service.AiServices;
+import dev.langchain4j.store.embedding.EmbeddingStore;
 import dev.langchain4j.store.embedding.EmbeddingStoreIngestor;
 import dev.langchain4j.store.embedding.inmemory.InMemoryEmbeddingStore;
 import org.springframework.context.annotation.Bean;
@@ -36,10 +38,16 @@ public class XiaoZhiMedicalAssistantConfig {
 
     private final AliyunModelProperties properties;
 
-    public XiaoZhiMedicalAssistantConfig(MongoChatMemoryStore mongoChatMemoryStore, QwenChatModel qwenChatModel, AliyunModelProperties properties) {
+    private final EmbeddingModel embeddingModel;
+
+    private final EmbeddingStore<TextSegment> embeddingStore;
+
+    public XiaoZhiMedicalAssistantConfig(MongoChatMemoryStore mongoChatMemoryStore, QwenChatModel qwenChatModel, AliyunModelProperties properties, EmbeddingModel embeddingModel, EmbeddingStore<TextSegment> embeddingStore) {
         this.mongoChatMemoryStore = mongoChatMemoryStore;
         this.qwenChatModel = qwenChatModel;
         this.properties = properties;
+        this.embeddingModel = embeddingModel;
+        this.embeddingStore = embeddingStore;
     }
 
     /**
@@ -67,13 +75,13 @@ public class XiaoZhiMedicalAssistantConfig {
      * @return XiaoZhiMedicalAssistant
      */
     @Bean
-    public XiaoZhiMedicalAssistant xiaoZhiMedicalAssistant(ChatMemoryProvider xiaoZhiChatMemoryProvider, AppointmentTool appointmentTool, ContentRetriever xiaoZhiContentRetriever) {
+    public XiaoZhiMedicalAssistant xiaoZhiMedicalAssistant(ChatMemoryProvider xiaoZhiChatMemoryProvider, AppointmentTool appointmentTool, ContentRetriever xiaoZhiContentRetriever, ContentRetriever contentRetriever) {
         return AiServices
                 .builder(XiaoZhiMedicalAssistant.class)
                 .chatModel(qwenChatModel)
                 .chatMemoryProvider(xiaoZhiChatMemoryProvider)
                 .tools(appointmentTool)
-                .contentRetriever(xiaoZhiContentRetriever)
+                .contentRetriever(contentRetriever)
                 .build();
     }
 
@@ -82,7 +90,7 @@ public class XiaoZhiMedicalAssistantConfig {
      *
      * @return ContentRetriever 从生成的向量库提取内容检索器
      */
-    @Bean
+//    @Bean
     public ContentRetriever xiaoZhiContentRetriever() {
         // 读取用于 RAG 的文档
         PathMatcher pathMatcher = FileSystems.getDefault().getPathMatcher("glob:*.md");
@@ -103,10 +111,27 @@ public class XiaoZhiMedicalAssistantConfig {
         EmbeddingStoreIngestor.builder()
                 .embeddingStore(embeddingStore)
                 .documentSplitter(documentSplitter)
-//                .embeddingModel(new BgeSmallEnV15QuantizedEmbeddingModel())
+                .embeddingModel(embeddingModel)
                 .build();
         EmbeddingStoreIngestor.ingest(documents, embeddingStore);
         return EmbeddingStoreContentRetriever.from(embeddingStore);
+    }
+
+
+    /**
+     * 构建基于 Pinecone 的内容检索库，增强 RAG 检索
+     * @return
+     */
+    @Bean
+    public ContentRetriever xiaoZhiPineconeRetriever() {
+        return EmbeddingStoreContentRetriever.builder()
+                .embeddingModel(embeddingModel)
+                .embeddingStore(embeddingStore)
+                // 查询的最大结果数量
+                .maxResults(1)
+                // 过滤的最低得分
+                .minScore(0.8)
+                .build();
     }
 }
 
