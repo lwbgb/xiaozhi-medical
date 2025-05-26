@@ -12,4 +12,7 @@ public interface XiaoZhiMedicalAssistant {
 
     @SystemMessage(fromResource = "templates/xiaozhi-medical-template.txt")
     Result<String> chat(@MemoryId Long memoryId, @UserMessage String userMessage);
+
+    @SystemMessage(fromResource = "templates/xiaozhi-medical-template.txt")
+    TokenStream streamChat(@MemoryId Long memoryId, @UserMessage String userMessage);
 }

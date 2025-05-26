@@ -1,6 +1,6 @@
 package pers.lwb.controller;
 
-import dev.langchain4j.service.Result;
+import dev.langchain4j.service.TokenStream;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.extern.slf4j.Slf4j;
@@ -27,11 +27,13 @@ public class XiaoZhiController {
     }
 
     @Operation(summary = "chat", description = "对话")
-    @PostMapping("/chat")
+    @PostMapping(value = "/chat")
     public String chat(@RequestBody ChatFormDTO chatFormDTO) {
         log.info("用户{}发起对话：{}", chatFormDTO.getMemoryId(), chatFormDTO.getMessage());
-        Result<String> result = xiaoZhiMedicalAssistant.chat(chatFormDTO.getMemoryId(), chatFormDTO.getMessage());
-        System.out.println(result.content());
-        return null;
+        TokenStream tokenStream = xiaoZhiMedicalAssistant.streamChat(chatFormDTO.getMemoryId(), chatFormDTO.getMessage());
+        tokenStream.onPartialResponse(System.out::print)
+                .onError(Throwable::printStackTrace)
+                .start();
+        return "success";
     }
 }

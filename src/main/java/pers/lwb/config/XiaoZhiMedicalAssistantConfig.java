@@ -1,6 +1,7 @@
 package pers.lwb.config;
 
 import dev.langchain4j.community.model.dashscope.QwenChatModel;
+import dev.langchain4j.community.model.dashscope.QwenStreamingChatModel;
 import dev.langchain4j.community.model.dashscope.QwenTokenCountEstimator;
 import dev.langchain4j.data.document.Document;
 import dev.langchain4j.data.document.loader.FileSystemDocumentLoader;
@@ -36,15 +37,18 @@ public class XiaoZhiMedicalAssistantConfig {
 
     private final QwenChatModel qwenChatModel;
 
+    private final QwenStreamingChatModel qwenStreamingChatModel;
+
     private final AliyunModelProperties properties;
 
     private final EmbeddingModel embeddingModel;
 
     private final EmbeddingStore<TextSegment> embeddingStore;
 
-    public XiaoZhiMedicalAssistantConfig(MongoChatMemoryStore mongoChatMemoryStore, QwenChatModel qwenChatModel, AliyunModelProperties properties, EmbeddingModel embeddingModel, EmbeddingStore<TextSegment> embeddingStore) {
+    public XiaoZhiMedicalAssistantConfig(MongoChatMemoryStore mongoChatMemoryStore, QwenChatModel qwenChatModel, QwenStreamingChatModel qwenStreamingChatModel, AliyunModelProperties properties, EmbeddingModel embeddingModel, EmbeddingStore<TextSegment> embeddingStore) {
         this.mongoChatMemoryStore = mongoChatMemoryStore;
         this.qwenChatModel = qwenChatModel;
+        this.qwenStreamingChatModel = qwenStreamingChatModel;
         this.properties = properties;
         this.embeddingModel = embeddingModel;
         this.embeddingStore = embeddingStore;
@@ -78,7 +82,8 @@ public class XiaoZhiMedicalAssistantConfig {
     public XiaoZhiMedicalAssistant xiaoZhiMedicalAssistant(ChatMemoryProvider xiaoZhiChatMemoryProvider, AppointmentTool appointmentTool, ContentRetriever xiaoZhiContentRetriever, ContentRetriever contentRetriever) {
         return AiServices
                 .builder(XiaoZhiMedicalAssistant.class)
-                .chatModel(qwenChatModel)
+//                .chatModel(qwenChatModel)
+                .streamingChatModel(qwenStreamingChatModel)
                 .chatMemoryProvider(xiaoZhiChatMemoryProvider)
                 .tools(appointmentTool)
                 .contentRetriever(contentRetriever)

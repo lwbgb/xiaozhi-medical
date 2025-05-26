@@ -77,6 +77,9 @@ langchain4j:
         embedding-model:
           api-key: ${langchain4j.community.dashscope.embedding-model.api-key}
           model-name: ${langchain4j.community.dashscope.embedding-model.model-name}
+        streaming-chat-model:
+          api-key: ${langchain4j.community.dashscope.streaming-chat-model.api-key}
+          model-name: ${langchain4j.community.dashscope.streaming-chat-model.model-name}
 
 aliyun:
   image-model:
