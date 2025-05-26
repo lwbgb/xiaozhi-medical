@@ -4,11 +4,10 @@ import dev.langchain4j.service.Result;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
 import pers.lwb.assistant.XiaoZhiMedicalAssistant;
 
 @Slf4j
-@SpringBootTest
+//@SpringBootTest
 public class XiaoZhiMedicalAssistantTest {
 
     @Autowired
